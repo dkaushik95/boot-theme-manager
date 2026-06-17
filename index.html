@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boot Theme Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        .hidden { display: none; }
+        .tab-btn { margin-bottom: 0; }
+        .active-tab { border-bottom: 2px solid var(--primary); }
+        .preview-img { max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid var(--muted-border-color); background: #000; }
+        nav ul li a { cursor: pointer; }
+        .loader { width: 48px; height: 48px; border: 5px solid #FFF; border-bottom-color: var(--primary); border-radius: 50%; display: inline-block; box-sizing: border-box; animation: rotation 1s linear infinite; }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <nav>
+            <ul>
+                <li><strong>Boot Theme Manager</strong></li>
+            </ul>
+            <ul>
+                <li><a id="tab-plymouth" class="active-tab" onclick="switchTab('plymouth')">Plymouth (OS Animation)</a></li>
+                <li><a id="tab-limine" onclick="switchTab('limine')">Limine (Boot Menu)</a></li>
+            </ul>
+        </nav>
+
+        <div id="loading-overlay" style="display: none;">
+            <span class="loader"></span>
+            <p id="loading-text" style="margin-top: 20px;">Working...</p>
+        </div>
+
+        <!-- Plymouth Section -->
+        <section id="section-plymouth">
+            <h3>Boot Animation (Plymouth)</h3>
+            <p>Select an animation to play while CachyOS loads.</p>
+            <label for="theme-select">Available Themes:</label>
+            <select id="theme-select">
+                <option>Loading...</option>
+            </select>
+            <div class="grid">
+                <button class="secondary" onclick="previewPlymouth()">Preview Theme (10s window)</button>
+                <button onclick="applyPlymouth()">Apply Theme (Requires Rebuild)</button>
+            </div>
+            <article id="plymouth-status" style="margin-top: 20px; display: none;"></article>
+        </section>
+
+        <!-- Limine Section -->
+        <section id="section-limine" style="display: none;">
+            <h3>Boot Menu Splash (Limine)</h3>
+            <p>Select a background image for the initial OS selection screen.</p>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <p><strong>Current Splash Image:</strong></p>
+                <img id="current-splash" class="preview-img" src="" alt="Current Limine Splash">
+            </div>
+
+            <div class="grid">
+                <button class="secondary" onclick="selectNewSplash()">1. Select New Image</button>
+                <button id="apply-limine-btn" onclick="applyLimine()" disabled>2. Apply New Image</button>
+            </div>
+            <p id="selected-file-path" style="margin-top: 10px; font-size: 0.9em; color: var(--muted-color);"></p>
+            <article id="limine-status" style="margin-top: 20px; display: none;"></article>
+        </section>
+    </main>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
