@@ -58,6 +58,15 @@ Categories=Utility;Settings;
 ```
 *(Make sure to update the `/path/to/` inside the `Exec` line)*
 
-## Technical Details (Wayland & Polkit)
+## Troubleshooting: Kernel Panic on Boot
 
-Graphical root applications often fail to launch on Wayland because `pkexec` strips essential environment variables. This application actively bridges that gap by detecting and re-injecting `WAYLAND_DISPLAY`, `DISPLAY`, `XDG_RUNTIME_DIR`, and `XAUTHORITY` variables into the root subshells, ensuring that the Plymouth previewer can spawn a window on your active Wayland session seamlessly.
+If you apply a theme and experience a **Kernel Panic** on your next reboot, it is likely because the `initramfs` image became too large for your bootloader to handle. 
+
+This happens when you use an animation with too many high-resolution frames. Each frame is a raw image that must be loaded into system RAM before the OS even starts.
+
+### How to prevent this:
+*   **Limit Frame Count:** Keep animations under 5-8 seconds.
+*   **Lower Resolution:** Scale your source images down (e.g., 480p or 360p) before creating the theme.
+*   **Lower Framerate:** 12-15 fps is usually enough for a boot animation and significantly reduces the file footprint.
+
+If you are stuck, boot into a recovery environment or use a snapshot to revert your `/boot` directory.
